@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        version: [2.8.0, latest]
+    runs-on: ubuntu-latest
+    container:
+      image: chapel/chapel:${{ matrix.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the project builds
+        run: |
+          mason build
+      - name: Check the examples build and run
+        run: |
+          mason build --example
+          for example in $(ls example/*.chpl); do
+            mason run --example $(basename $example);
+          done
+      - name: Run mason tests
+        run: |
+          mason test --show --parallel
+      - name: Run chplcheck
+        run: |
+          # TODO: disable line length for now since the doc strings are too long
+          chplcheck src/**/*.chpl --disable-rule LineLength
+      - name: Check undocumented symbols
+        shell: bash
+        run: |
+          shopt -s globstar
+          chpl_home=$(chpl --print-chpl-home)
+          CHPL_HOME=$chpl_home $chpl_home/tools/chpldoc/findUndocumentedSymbols --ci src/**/*.chpl

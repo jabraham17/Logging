@@ -1,0 +1,5 @@
+target/
+Mason.lock
+doc/
+.cls-commands.json
+.vscode/settings.json

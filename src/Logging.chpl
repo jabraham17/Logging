@@ -197,7 +197,7 @@ module Logging {
       const formattedMessage = format.format(timestamp, level, moduleName,
                                               routineName, lineNumber,
                                               name, message);
-      stream.write(formattedMessage);
+      stream.writeln(formattedMessage);
     }
     /*
       Log a message at the ``INFO`` level. Accepts any number of arguments,

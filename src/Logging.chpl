@@ -411,6 +411,16 @@ module Logging {
                moduleName, routineName, lineNumber);
       }
     }
+
+    /*
+      Flush the output stream, ensuring that all buffered log messages are
+      written out. This can be useful to call before program exit to ensure all
+      logs are captured, or after critical log messages to ensure they are not
+      lost if the program crashes.
+    */
+    proc flush() {
+      stream.flush();
+    }
   }
 
 

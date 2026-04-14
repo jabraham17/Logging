@@ -203,8 +203,8 @@ module Logging {
       Log a message at the ``INFO`` level. Accepts any number of arguments,
       which are stringified and concatenated. Use the overload with
       ``moduleName``, ``routineName``, and ``lineNumber`` to include source
-      location in the output (pass ``MN()``, ``RN()``, ``LN()``, respectively, for automatic
-      capture).
+      location in the output (pass ``MN()``, ``RN()``, ``LN()``, respectively,
+      for automatic capture).
 
       The ``infof`` variant accepts a format string followed by arguments,
       using Chapel's `formatted I/O <https://chapel-lang.org/docs/modules/standard/IO/FormattedIO.html#about-io-formatted-io>`_ syntax.

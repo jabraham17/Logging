@@ -158,7 +158,7 @@ module Logging {
         standard format (:type:`LogFormat`), or another subclass of
         :type:`LogFormat`.
     */
-    pragma "no where doc"
+    @chpldoc.noWhereDoc
     proc init(name: string,
               logLevel: LogLevel = LogLevel.INFO,
               colorMode: ColorMode = ColorMode.AUTO,

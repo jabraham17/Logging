@@ -39,10 +39,14 @@ proc main() {
     }
     override proc styleForLogName(level: Logging.LogLevel): styledText {
       select level {
-        when Logging.LogLevel.INFO do return style().bold();
-        when Logging.LogLevel.ERROR do return style().bold().fg(TerminalColors.red());
-        when Logging.LogLevel.DEBUG do return style().bold().fg(TerminalColors.blue());
-        when Logging.LogLevel.WARNING do return style().bold().fg(TerminalColors.yellow());
+        when Logging.LogLevel.INFO do
+          return style().bold();
+        when Logging.LogLevel.ERROR do
+          return style().bold().fg(TerminalColors.red());
+        when Logging.LogLevel.DEBUG do
+          return style().bold().fg(TerminalColors.blue());
+        when Logging.LogLevel.WARNING do
+          return style().bold().fg(TerminalColors.yellow());
       }
       return style();
     }

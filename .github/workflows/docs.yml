@@ -41,7 +41,7 @@ jobs:
           path: ./doc/
 
   deploy:
-    if: github.event_name == 'push' && github.repository == 'jabraham17/Logging'
+    if: github.event_name == 'push' && !github.event.repository.fork
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

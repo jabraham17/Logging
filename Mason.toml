@@ -1,6 +1,6 @@
 [brick]
 name = "Logging"
-version = "0.2.0"
+version = "0.1.0"
 chplVersion = "2.8.0"
 type = "library"
 source = "git@github.com:jabraham17/Logging.git"

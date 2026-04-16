@@ -7,7 +7,7 @@ Logging is a logging library for Chapel. It provides a simple interface for logg
 Add Logging as a Mason dependency:
 
 ```bash
-mason add Logging@0.2.0
+mason add Logging@0.1.0
 ```
 
 ## Usage

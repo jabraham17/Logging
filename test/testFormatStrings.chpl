@@ -1,8 +1,8 @@
 use UnitTest;
-import Logging;
-import Logging.{MN, RN, LN};
+import Log;
+import Log.{MN, RN, LN};
 
-class MemoryLogStream: Logging.LogStream {
+class MemoryLogStream: Log.LogStream {
   var messages: string;
   override proc write(message: string) {
     messages += message + "\n";
@@ -12,9 +12,9 @@ class MemoryLogStream: Logging.LogStream {
 
 proc testDefaultFormat(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.info("unique_test_message");
   test.assertTrue(stream.messages.contains("[info]"));
   test.assertTrue(stream.messages.contains("unique_test_message"));
@@ -22,25 +22,25 @@ proc testDefaultFormat(test: borrowed Test) throws {
 
 proc testCustomFormatMessageOnly(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               format=new Logging.LogFormat("%m%"));
+                               format=new Log.LogFormat("%m%"));
   log.info("just the message");
   test.assertEqual(stream.messages.strip(), "just the message");
 }
 
 proc testCustomFormatNameAndMessage(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("myLog", stream=stream,
-                               format=new Logging.LogFormat("%NAME%: %m%"));
+  var log = new Log.logger("myLog", stream=stream,
+                               format=new Log.LogFormat("%NAME%: %m%"));
   log.error("hello");
   test.assertEqual(stream.messages.strip(), "myLog: hello");
 }
 
 proc testCustomFormatLevelAndMessage(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test", stream=stream,
-                               format=new Logging.LogFormat("[%LL%] %m%"));
+  var log = new Log.logger("test", stream=stream,
+                               format=new Log.LogFormat("[%LL%] %m%"));
   log.warn("hello");
   test.assertEqual(stream.messages.strip(), "[warning] hello");
 }

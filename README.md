@@ -1,13 +1,13 @@
-# Logging
+# Log
 
-Logging is a logging library for Chapel. It provides a simple interface for logging messages at different levels (DEBUG, INFO, WARNING, ERROR) and supports multiple output targets (console, file, etc.).
+Log is a logging library for Chapel. It provides a simple interface for logging messages at different levels (DEBUG, INFO, WARNING, ERROR) and supports multiple output targets (console, file, etc.).
 
 ## Installation
 
-Add Logging as a Mason dependency:
+Add Log as a Mason dependency:
 
 ```bash
-mason add Logging@0.1.0
+mason add Log@0.1.0
 ```
 
 ## Usage

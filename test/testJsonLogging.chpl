@@ -1,6 +1,6 @@
 use UnitTest;
-import Logging;
-import Logging.{MN, RN, LN};
+import Log;
+import Log.{MN, RN, LN};
 use IO;
 use List;
 use Map;
@@ -16,12 +16,12 @@ proc readLogFile(filename: string): logData throws {
   return r.read(logData);
 }
 
-proc makeJsonLogger(name: string, filename: string): Logging.logger {
-  return new Logging.logger(name,
-                            logLevel=Logging.LogLevel.INFO,
-                            colorMode=Logging.ColorMode.NEVER,
-                            stream=new Logging.JsonLogStream(filename),
-                            format=new Logging.JsonLogFormat());
+proc makeJsonLogger(name: string, filename: string): Log.logger {
+  return new Log.logger(name,
+                            logLevel=Log.LogLevel.INFO,
+                            colorMode=Log.ColorMode.NEVER,
+                            stream=new Log.JsonStream(filename),
+                            format=new Log.JsonFormat());
 }
 
 proc testJsonSingleEntry(test: borrowed Test) throws {

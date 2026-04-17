@@ -1,5 +1,5 @@
-import Logging;
-import Logging.{MN, RN, LN};
+import Log;
+import Log.{MN, RN, LN};
 import TerminalColors;
 import TerminalColors.{styledText, style};
 
@@ -14,9 +14,9 @@ proc printLogs(log) {
   log.debug("This is a debug message");
   log.warn("This is a warning message");
 
-  log.info("Logging an int: ", 42);
-  log.info("Logging a string: ", "hello");
-  log.info("Logging a record: ", new myRecord(5, "hi"));
+  log.info("Log an int: ", 42);
+  log.info("Log a string: ", "hello");
+  log.info("Log a record: ", new myRecord(5, "hi"));
 
   log.info(MN(), RN(), LN(), "Info log with line info");
   log.error(MN(), RN(), LN(), "Error log with line info");
@@ -25,40 +25,40 @@ proc printLogs(log) {
 }
 
 proc main() {
-  var log = new Logging.logger("my log");
+  var log = new Log.logger("my log");
   printLogs(log);
 
-  var strm = new Logging.LogStderrStream();
-  var fmt = new Logging.LogFormat("%NAME% - %LL%: %m%");
-  log = new Logging.logger("my log", stream=strm, format=fmt);
+  var strm = new Log.StderrStream();
+  var fmt = new Log.LogFormat("%NAME% - %LL%: %m%");
+  log = new Log.logger("my log", stream=strm, format=fmt);
   printLogs(log);
 
-  class MyCustomFormat: Logging.LogFormat {
+  class MyCustomFormat: Log.LogFormat {
     proc init(args...) {
       super.init((...args));
     }
-    override proc styleForLogName(level: Logging.LogLevel): styledText {
+    override proc styleForLogName(level: Log.LogLevel): styledText {
       select level {
-        when Logging.LogLevel.INFO do
+        when Log.LogLevel.INFO do
           return style().bold();
-        when Logging.LogLevel.ERROR do
+        when Log.LogLevel.ERROR do
           return style().bold().fg(TerminalColors.red());
-        when Logging.LogLevel.DEBUG do
+        when Log.LogLevel.DEBUG do
           return style().bold().fg(TerminalColors.blue());
-        when Logging.LogLevel.WARNING do
+        when Log.LogLevel.WARNING do
           return style().bold().fg(TerminalColors.yellow());
       }
       return style();
     }
   }
-  log = new Logging.logger("my log",
+  log = new Log.logger("my log",
                            logLevelEnvVar="MY_LOG_LEVEL",
-                           stream=new Logging.LogStderrStream(),
+                           stream=new Log.StderrStream(),
                            format=new MyCustomFormat("%NAME%: %m%"));
   printLogs(log);
 
-  var jsonLog = new Logging.logger("json log",
-                            stream=new Logging.JsonLogStream("log.json"),
-                            format=new Logging.JsonLogFormat());
+  var jsonLog = new Log.logger("json log",
+                            stream=new Log.JsonStream("log.json"),
+                            format=new Log.JsonFormat());
   printLogs(jsonLog);
 }

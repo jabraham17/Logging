@@ -1,1 +1,1 @@
-.. include:: /modules/src/Logging.rst
+.. include:: /modules/src/Log.rst

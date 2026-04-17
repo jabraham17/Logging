@@ -1,8 +1,8 @@
 use UnitTest;
-import Logging;
-import Logging.{MN, RN, LN};
+import Log;
+import Log.{MN, RN, LN};
 
-class MemoryLogStream: Logging.LogStream {
+class MemoryLogStream: Log.LogStream {
   var messages: string;
   override proc write(message: string) {
     messages += message + "\n";
@@ -12,9 +12,9 @@ class MemoryLogStream: Logging.LogStream {
 
 proc testInfoSimple(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.info("message");
   test.assertTrue(stream.messages.contains("[info]"));
   test.assertTrue(stream.messages.contains("message"));
@@ -22,18 +22,18 @@ proc testInfoSimple(test: borrowed Test) throws {
 
 proc testInfoMultiArg(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.info("count: ", 42);
   test.assertTrue(stream.messages.contains("count: 42"));
 }
 
 proc testInfoWithSourceLocation(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.info(MN(), RN(), LN(), "located");
   test.assertTrue(stream.messages.contains("located"));
   test.assertTrue(stream.messages.contains("testBasicLogging"));
@@ -42,9 +42,9 @@ proc testInfoWithSourceLocation(test: borrowed Test) throws {
 
 proc testInfoWithSourceLocationMultiArg(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.info(MN(), RN(), LN(), "count: ", 42);
   test.assertTrue(stream.messages.contains("count: 42"));
   test.assertTrue(stream.messages.contains("testBasicLogging"));
@@ -52,18 +52,18 @@ proc testInfoWithSourceLocationMultiArg(test: borrowed Test) throws {
 
 proc testInfof(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.infof("hello %s %i", "world", 42);
   test.assertTrue(stream.messages.contains("hello world 42"));
 }
 
 proc testInfofWithSourceLocation(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.infof(MN(), RN(), LN(), "val=%i,val2=%s", 7, "test");
   test.assertTrue(stream.messages.contains("val=7"));
   test.assertTrue(stream.messages.contains("val2=test"));
@@ -72,10 +72,10 @@ proc testInfofWithSourceLocation(test: borrowed Test) throws {
 
 proc testDebugSimple(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               logLevel=Logging.LogLevel.DEBUG,
+  var log = new Log.logger("test",
+                               logLevel=Log.LogLevel.DEBUG,
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.debug("dbg");
   test.assertTrue(stream.messages.contains("[debug]"));
   test.assertTrue(stream.messages.contains("dbg"));
@@ -83,20 +83,20 @@ proc testDebugSimple(test: borrowed Test) throws {
 
 proc testDebugMultiArg(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               logLevel=Logging.LogLevel.DEBUG,
+  var log = new Log.logger("test",
+                               logLevel=Log.LogLevel.DEBUG,
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.debug("x=", 10);
   test.assertTrue(stream.messages.contains("x=10"));
 }
 
 proc testDebugWithSourceLocation(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               logLevel=Logging.LogLevel.DEBUG,
+  var log = new Log.logger("test",
+                               logLevel=Log.LogLevel.DEBUG,
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.debug(MN(), RN(), LN(), "dbg located");
   test.assertTrue(stream.messages.contains("dbg located"));
   test.assertTrue(stream.messages.contains("testBasicLogging"));
@@ -104,10 +104,10 @@ proc testDebugWithSourceLocation(test: borrowed Test) throws {
 
 proc testDebugWithSourceLocationMultiArg(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               logLevel=Logging.LogLevel.DEBUG,
+  var log = new Log.logger("test",
+                               logLevel=Log.LogLevel.DEBUG,
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.debug(MN(), RN(), LN(), "x=", 10);
   test.assertTrue(stream.messages.contains("x=10"));
   test.assertTrue(stream.messages.contains("testBasicLogging"));
@@ -115,10 +115,10 @@ proc testDebugWithSourceLocationMultiArg(test: borrowed Test) throws {
 
 proc testDebugf(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               logLevel=Logging.LogLevel.DEBUG,
+  var log = new Log.logger("test",
+                               logLevel=Log.LogLevel.DEBUG,
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.debugf("val=%i,val2=%s", 99, "debug");
   test.assertTrue(stream.messages.contains("val=99"));
   test.assertTrue(stream.messages.contains("val2=debug"));
@@ -126,10 +126,10 @@ proc testDebugf(test: borrowed Test) throws {
 
 proc testDebugfWithSourceLocation(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               logLevel=Logging.LogLevel.DEBUG,
+  var log = new Log.logger("test",
+                               logLevel=Log.LogLevel.DEBUG,
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.debugf(MN(), RN(), LN(), "v=%i,v2=%s", 5, "test");
   test.assertTrue(stream.messages.contains("v=5"));
   test.assertTrue(stream.messages.contains("v2=test"));
@@ -138,9 +138,9 @@ proc testDebugfWithSourceLocation(test: borrowed Test) throws {
 
 proc testWarnSimple(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.warn("warning msg");
   test.assertTrue(stream.messages.contains("[warning]"));
   test.assertTrue(stream.messages.contains("warning msg"));
@@ -148,18 +148,18 @@ proc testWarnSimple(test: borrowed Test) throws {
 
 proc testWarnMultiArg(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.warn("temp: ", 100, " degrees");
   test.assertTrue(stream.messages.contains("temp: 100 degrees"));
 }
 
 proc testWarnWithSourceLocation(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.warn(MN(), RN(), LN(), "warn located");
   test.assertTrue(stream.messages.contains("warn located"));
   test.assertTrue(stream.messages.contains("testBasicLogging"));
@@ -167,9 +167,9 @@ proc testWarnWithSourceLocation(test: borrowed Test) throws {
 
 proc testWarnWithSourceLocationMultiArg(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.warn(MN(), RN(), LN(), "temp: ", 100);
   test.assertTrue(stream.messages.contains("temp: 100"));
   test.assertTrue(stream.messages.contains("testBasicLogging"));
@@ -177,18 +177,18 @@ proc testWarnWithSourceLocationMultiArg(test: borrowed Test) throws {
 
 proc testWarnf(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.warnf("disk at %i %s", 90, "percent");
   test.assertTrue(stream.messages.contains("disk at 90 percent"));
 }
 
 proc testWarnfWithSourceLocation(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.warnf(MN(), RN(), LN(), "disk=%i%s", 90, "%");
   test.assertTrue(stream.messages.contains("disk=90%"));
   test.assertTrue(stream.messages.contains("testBasicLogging"));
@@ -196,9 +196,9 @@ proc testWarnfWithSourceLocation(test: borrowed Test) throws {
 
 proc testErrorSimple(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.error("err msg");
   test.assertTrue(stream.messages.contains("[error]"));
   test.assertTrue(stream.messages.contains("err msg"));
@@ -206,18 +206,18 @@ proc testErrorSimple(test: borrowed Test) throws {
 
 proc testErrorMultiArg(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.error("code: ", 500);
   test.assertTrue(stream.messages.contains("code: 500"));
 }
 
 proc testErrorWithSourceLocation(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.error(MN(), RN(), LN(), "err located");
   test.assertTrue(stream.messages.contains("err located"));
   test.assertTrue(stream.messages.contains("testBasicLogging"));
@@ -225,9 +225,9 @@ proc testErrorWithSourceLocation(test: borrowed Test) throws {
 
 proc testErrorWithSourceLocationMultiArg(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.error(MN(), RN(), LN(), "code: ", 500);
   test.assertTrue(stream.messages.contains("code: 500"));
   test.assertTrue(stream.messages.contains("testBasicLogging"));
@@ -235,18 +235,18 @@ proc testErrorWithSourceLocationMultiArg(test: borrowed Test) throws {
 
 proc testErrorf(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.errorf("failed: %s %n", "timeout", 10);
   test.assertTrue(stream.messages.contains("failed: timeout 10"));
 }
 
 proc testErrorfWithSourceLocation(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
+  var log = new Log.logger("test",
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.errorf(MN(), RN(), LN(), "err=%s,other=%n", "bad", 2);
   test.assertTrue(stream.messages.contains("err=bad"));
   test.assertTrue(stream.messages.contains("other=2"));
@@ -255,10 +255,10 @@ proc testErrorfWithSourceLocation(test: borrowed Test) throws {
 
 proc testLogLevelFiltering_InfoLevel(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               logLevel=Logging.LogLevel.INFO,
+  var log = new Log.logger("test",
+                               logLevel=Log.LogLevel.INFO,
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.info("info msg");
   log.warn("warn msg");
   log.error("error msg");
@@ -271,10 +271,10 @@ proc testLogLevelFiltering_InfoLevel(test: borrowed Test) throws {
 
 proc testLogLevelFiltering_ErrorLevel(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               logLevel=Logging.LogLevel.ERROR,
+  var log = new Log.logger("test",
+                               logLevel=Log.LogLevel.ERROR,
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.info("info msg");
   log.warn("warn msg");
   log.error("error msg");
@@ -287,10 +287,10 @@ proc testLogLevelFiltering_ErrorLevel(test: borrowed Test) throws {
 
 proc testLogLevelFiltering_DebugLevel(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               logLevel=Logging.LogLevel.DEBUG,
+  var log = new Log.logger("test",
+                               logLevel=Log.LogLevel.DEBUG,
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.info("info msg");
   log.warn("warn msg");
   log.error("error msg");
@@ -303,10 +303,10 @@ proc testLogLevelFiltering_DebugLevel(test: borrowed Test) throws {
 
 proc testLogLevelFiltering_WarningLevel(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               logLevel=Logging.LogLevel.WARNING,
+  var log = new Log.logger("test",
+                               logLevel=Log.LogLevel.WARNING,
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.info("info msg");
   log.warn("warn msg");
   log.error("error msg");
@@ -319,10 +319,10 @@ proc testLogLevelFiltering_WarningLevel(test: borrowed Test) throws {
 
 proc testLogLevelFiltering_NoneLevel(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               logLevel=Logging.LogLevel.NONE,
+  var log = new Log.logger("test",
+                               logLevel=Log.LogLevel.NONE,
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.info("info msg");
   log.warn("warn msg");
   log.error("error msg");
@@ -332,10 +332,10 @@ proc testLogLevelFiltering_NoneLevel(test: borrowed Test) throws {
 
 proc testLoggerName(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("myTestLogger",
-                               format=new Logging.LogFormat("%NAME% %m%"),
+  var log = new Log.logger("myTestLogger",
+                               format=new Log.LogFormat("%NAME% %m%"),
                                stream=stream,
-                               colorMode=Logging.ColorMode.NEVER);
+                               colorMode=Log.ColorMode.NEVER);
   log.info("hello");
   test.assertTrue(stream.messages.contains("myTestLogger"));
   test.assertTrue(stream.messages.contains("hello"));

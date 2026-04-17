@@ -1,12 +1,12 @@
 use UnitTest;
-import Logging;
-import Logging.{MN, RN, LN};
+import Log;
+import Log.{MN, RN, LN};
 import TerminalColors;
 import TerminalColors.{styledText, style};
 use IO;
 import Time;
 
-class MemoryLogStream: Logging.LogStream {
+class MemoryLogStream: Log.LogStream {
   var messages: string;
   override proc write(message: string) {
     messages += message + "\n";
@@ -25,25 +25,25 @@ proc readLogFile(filename: string): string throws {
 }
 
 
-class CustomStyleFormat: Logging.LogFormat {
+class CustomStyleFormat: Log.LogFormat {
   proc init(formatString: string = "%T% [%LL%] %NAME% %m%") {
     super.init(formatString);
   }
-  override proc styleForLogLevel(level: Logging.LogLevel): styledText {
+  override proc styleForLogLevel(level: Log.LogLevel): styledText {
     return style().fg(TerminalColors.magenta()).bold();
   }
-  override proc styleForLogName(level: Logging.LogLevel): styledText {
+  override proc styleForLogName(level: Log.LogLevel): styledText {
     return style().fg(TerminalColors.cyan()).italic();
   }
-  override proc styleForTimestamp(level: Logging.LogLevel): styledText {
+  override proc styleForTimestamp(level: Log.LogLevel): styledText {
     return style().fg(TerminalColors.green()).dim();
   }
 }
 
 proc testCustomStyle(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               colorMode=Logging.ColorMode.ALWAYS,
+  var log = new Log.logger("test",
+                               colorMode=Log.ColorMode.ALWAYS,
                                stream=stream,
                                format=new CustomStyleFormat());
   const time = Time.dateTime.now();
@@ -65,7 +65,7 @@ proc testCustomStyle(test: borrowed Test) throws {
 }
 
 
-class FixedFormat: Logging.LogFormat {
+class FixedFormat: Log.LogFormat {
   proc init() {
     super.init("%m%");
   }
@@ -79,8 +79,8 @@ class FixedFormat: Logging.LogFormat {
 
 proc testCustomFormatOverride(test: borrowed Test) throws {
   var stream = new shared MemoryLogStream();
-  var log = new Logging.logger("test",
-                               colorMode=Logging.ColorMode.NEVER,
+  var log = new Log.logger("test",
+                               colorMode=Log.ColorMode.NEVER,
                                stream=stream,
                                format=new FixedFormat());
   log.info("hello");

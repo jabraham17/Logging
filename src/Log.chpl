@@ -9,10 +9,10 @@
 
   .. code-block:: chapel
 
-     import Logging;
-     import Logging.{MN, RN, LN};
+     import Log;
+     import Log.{MN, RN, LN};
 
-     var log = new Logging.logger("myApp");
+     var log = new Log.logger("myApp");
      log.info("Application started");
      log.warn("Something looks odd");
      log.error("Something went wrong");
@@ -32,12 +32,12 @@
     and customizable color schemes
 
   * Built-in log format/stream options to cover common use cases
-    (e.g. :type:`LogStderrStream`, :type:`LogFileStream`, :type:`JsonLogFormat`)
+    (e.g. :type:`StderrStream`, :type:`FileStream`, :type:`JsonFormat`)
 
 */
 @chpldoc.noUsage
 @chpldoc.noAutoInclude
-module Logging {
+module Log {
   import TerminalColors;
   import TerminalColors.{styledText, style, reset};
   import TemplateString.templateString;
@@ -112,7 +112,7 @@ module Logging {
 
     .. code-block:: chapel
 
-      var log = new Logging.logger("myApp");
+      var log = new Log.logger("myApp");
       log.info("server started on port ", port);
       log.error("connection failed");
 
@@ -479,7 +479,7 @@ module Logging {
     A :type:`LogStream` that writes log messages to ``stderr``
     instead of ``stdout``.
   */
-  class LogStderrStream: LogStream {
+  class StderrStream: LogStream {
     /**/
     override proc write(message: string) {
       try {
@@ -505,17 +505,17 @@ module Logging {
 
     .. code-block:: chapel
 
-      var log = new Logging.logger("app",
-                                   stream=new Logging.LogFileStream("app.log"));
+      var log = new Log.logger("app",
+                                   stream=new Log.FileStream("app.log"));
 
   */
-  class LogFileStream: LogStream {
+  class FileStream: LogStream {
     @chpldoc.nodoc
     var outFile: file;
     @chpldoc.nodoc
     var writer: fileWriter(locking=true);
     /*
-      Create a ``LogFileStream`` that writes to the given file path.
+      Create a ``FileStream`` that writes to the given file path.
       The file is created or truncated on open.
 
       :arg filename: The path to the log file.
@@ -563,25 +563,25 @@ module Logging {
       return outFile;
   }
   /*
-    A :type:`LogFileStream` that writes log entries as a JSON array to a file.
+    A :type:`FileStream` that writes log entries as a JSON array to a file.
 
     The output file contains a JSON object with a ``"logs"`` key holding an
-    array of entries. Pair with :type:`JsonLogFormat` to produce valid JSON
+    array of entries. Pair with :type:`JsonFormat` to produce valid JSON
     log entries.
 
     .. code-block:: chapel
 
-      var log = new Logging.logger("app",
-                                   stream=new Logging.JsonLogStream("app.json"),
-                                   format=new Logging.JsonLogFormat());
+      var log = new Log.logger("app",
+                                   stream=new Log.JsonStream("app.json"),
+                                   format=new Log.JsonFormat());
 
   */
-  class JsonLogStream: LogFileStream {
+  class JsonStream: FileStream {
     @chpldoc.nodoc
     var sep: string = "";
 
     /*
-      Create a ``JsonLogStream`` that writes JSON log entries to the given file.
+      Create a ``JsonStream`` that writes JSON log entries to the given file.
 
       :arg filename: The path to the JSON log file.
     */
@@ -609,7 +609,7 @@ module Logging {
     /*
       Write a JSON log entry to the file. The ``message`` argument should
       already be a valid JSON object string (as produced by
-      :type:`JsonLogFormat`).
+      :type:`JsonFormat`).
     */
     override proc write(message: string) {
       try {
@@ -663,8 +663,8 @@ module Logging {
 
     .. code-block:: chapel
 
-      var fmt = new Logging.LogFormat("%NAME% [%LL%]: %m%");
-      var log = new Logging.logger("app", format=fmt);
+      var fmt = new Log.LogFormat("%NAME% [%LL%]: %m%");
+      var log = new Log.logger("app", format=fmt);
 
     **Customization points for subclasses:**
 
@@ -791,16 +791,16 @@ module Logging {
 
     Each call to :proc:`~LogFormat.format` returns a single-line JSON object
     containing all log fields. String values are escaped for safe JSON output.
-    Pair with :type:`JsonLogStream` to write a complete JSON log file.
+    Pair with :type:`JsonStream` to write a complete JSON log file.
 
     .. code-block:: chapel
 
-      var log = new Logging.logger("app",
-                                   stream=new Logging.JsonLogStream("app.json"),
-                                   format=new Logging.JsonLogFormat());
+      var log = new Log.logger("app",
+                                   stream=new Log.JsonStream("app.json"),
+                                   format=new Log.JsonFormat());
 
   */
-  class JsonLogFormat: LogFormat {
+  class JsonFormat: LogFormat {
     @chpldoc.nodoc
     proc init() {
       super.init('{"timestamp":"%T%","level":"%LL%",'+

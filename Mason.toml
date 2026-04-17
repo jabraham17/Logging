@@ -1,9 +1,9 @@
 [brick]
-name = "Logging"
+name = "Log"
 version = "0.1.0"
 chplVersion = "2.8.0"
 type = "library"
-source = "git@github.com:jabraham17/Logging.git"
+source = "git@github.com:jabraham17/Log.git"
 authors = ["Jade Abraham"]
 copyrightYear = "2026"
 license = "Apache-2.0"

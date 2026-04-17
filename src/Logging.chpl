@@ -35,6 +35,8 @@
     (e.g. :type:`LogStderrStream`, :type:`LogFileStream`, :type:`JsonLogFormat`)
 
 */
+@chpldoc.noUsage
+@chpldoc.noAutoInclude
 module Logging {
   import TerminalColors;
   import TerminalColors.{styledText, style, reset};

@@ -636,9 +636,20 @@ module Log {
   @chpldoc.nodoc
   proc computeUseColor(colorMode: ColorMode,
                        stream: borrowed LogStream?): bool {
-    return colorMode == ColorMode.ALWAYS ||
-            (colorMode == ColorMode.AUTO &&
-             stream != nil && stream!.getFile().isAtty());
+    // primitives from the Version module, which does not provide public params
+    param major = __primitive("version major");
+    param minor = __primitive("version minor");
+    // isAtty is only available in 2.9 and later, so we check the version before calling it
+    if major >= 2 && minor >= 9 {
+      return colorMode == ColorMode.ALWAYS ||
+              (colorMode == ColorMode.AUTO &&
+              stream != nil && stream!.getFile().isAtty());
+    } else {
+      if colorMode == ColorMode.AUTO {
+        warning("ColorMode.AUTO is not fully supported in Chapel versions prior to 2.9.");
+      }
+      return colorMode == ColorMode.ALWAYS;
+    }
   }
 
   /*

@@ -7,7 +7,7 @@ Log is a logging library for Chapel. It provides a simple interface for logging 
 Add Log as a Mason dependency:
 
 ```bash
-mason add Log@0.2.0
+mason add Log@0.3.0
 ```
 
 ## Usage
